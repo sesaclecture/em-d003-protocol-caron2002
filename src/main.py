@@ -5,6 +5,11 @@
 # level 값은 0 또는 1입니다.
 # 0이면 "LOW", 1이면 "HIGH"를 반환해야 합니다.
 def gpio_level_to_state(level):
+    if level:
+        return "HIGH"
+
+    return "LOW"
+
     raise NotImplementedError
 
 
@@ -16,6 +21,8 @@ def gpio_level_to_state(level):
 # 송신 데이터는 bytes 타입이어야 합니다.
 # UART 메시지 끝에는 newline 문자가 포함되어야 합니다.
 def make_uart_tx_packet(message):
+    msg = f"{message}\n"
+    return msg.encode()
     raise NotImplementedError
 
 
@@ -26,6 +33,7 @@ def make_uart_tx_packet(message):
 # packet은 bytes 타입입니다.
 # 수신 데이터 끝의 newline 문자를 제거하고 문자열로 반환해야 합니다.
 def parse_uart_rx_packet(packet):
+    return packet.decode().strip()
     raise NotImplementedError
 
 
@@ -36,6 +44,9 @@ def parse_uart_rx_packet(packet):
 # address는 정수입니다.
 # 유효하면 True, 아니면 False를 반환해야 합니다.
 def is_valid_i2c_address(address):
+    if 0 <= address and address < 128:
+        return True
+    return False
     raise NotImplementedError
 
 
@@ -50,4 +61,5 @@ def is_valid_i2c_address(address):
 #
 # [command, payload_length, payload...]
 def make_spi_transfer_frame(command, payload):
+    return [command, len(payload), *payload]
     raise NotImplementedError
